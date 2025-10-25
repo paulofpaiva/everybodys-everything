@@ -4,19 +4,20 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import { ArrowLeft, Hash } from "lucide-react";
-import { formatTextWithLinksAndHashtags } from "@/lib/url-utils";
 import { ShareDropdown } from "@/components/ShareDropdown";
+import { PostContent } from "@/components/PostContent";
 
 interface PostDetailProps {
   post: {
     id: string;
-    content: string;
+    type: string;
+    content?: string | null;
+    drawing_data?: any;
     createdAt: Date | string;
   };
 }
 
 export function PostDetail({ post }: PostDetailProps) {
-  const textParts = formatTextWithLinksAndHashtags(post.content);
   
   return (
     <main className="container mx-auto px-4 py-8 max-w-4xl">
@@ -33,27 +34,13 @@ export function PostDetail({ post }: PostDetailProps) {
         <Card className="shadow-xl border-0 bg-white/80 dark:bg-black/80 backdrop-blur-sm">
           <CardContent className="space-y-6">
             <div className="pt-5">
-              <p className="text-lg leading-relaxed text-gray-700 dark:text-gray-200">
-                {textParts.map((part, index) => 
-                  part.isLink ? (
-                    <a 
-                      key={index} 
-                      href={part.url} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="text-blue-600 dark:text-blue-400 underline hover:text-blue-800 dark:hover:text-blue-300 transition-colors"
-                    >
-                      {part.text}
-                    </a>
-                  ) : part.isHashtag ? (
-                    <span key={index} className="text-blue-600 dark:text-blue-400 font-medium">
-                      {part.text}
-                    </span>
-                  ) : (
-                    <span key={index}>{part.text}</span>
-                  )
-                )}
-              </p>
+              <PostContent
+                type={post.type}
+                content={post.content}
+                drawing_data={post.drawing_data}
+                className="text-lg leading-relaxed text-gray-700 dark:text-gray-200"
+                isDetailView={true}
+              />
             </div>
 
             <Separator />

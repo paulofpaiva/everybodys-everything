@@ -4,18 +4,35 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
-import { usePosts } from "@/features/posts/hooks/use-posts";
 import { CardPost } from "@/components/CardPost";
 import { CardPostSkeleton } from "@/components/CardPostSkeleton";
 import { ResponsiveDropdown } from "@/components/ResponsiveDropdown";
 import { BackToTop } from "@/components/BackToTop";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { Search } from "lucide-react";
+import { Search, Image, PenTool } from "lucide-react";
+import { DrawingPostModal } from "@/components/DrawingPostModal";
+import { DrawingPreview } from "@/components/DrawingPreview";
+import { useDrawingPost } from "@/hooks/use-drawing-post";
 
 export default function Home() {
   const [sortBy, setSortBy] = useState("latest");
   const [searchQuery, setSearchQuery] = useState("");
-  const { form, data, onSubmit, mutation, loader, isFetchingNextPage } = usePosts(sortBy, searchQuery);
+  const { 
+    form, 
+    data, 
+    mutation, 
+    loader, 
+    isFetchingNextPage,
+    isLoading,
+    isPending,
+    isDrawModalOpen,
+    setIsDrawModalOpen,
+    drawingData,
+    handleDrawingSave,
+    handleRemoveDrawing,
+    handleSubmit,
+    isPostEnabled,
+  } = useDrawingPost(sortBy, searchQuery);
 
   return (
     <main className="container mx-auto px-4 py-8">
@@ -25,23 +42,67 @@ export default function Home() {
       </div>
 
       <div className="space-y-6">
-        <form onSubmit={form.handleSubmit(onSubmit)} className="md:max-w-md">
+        <form onSubmit={form.handleSubmit(handleSubmit)} className="md:max-w-md">
           <div className="space-y-2">
-            <div className="flex flex-col md:flex-row md:items-center gap-2">
+            <div className="flex flex-col gap-2">
               <Textarea
                 {...form.register("content")}
                 placeholder="Say something..."
                 className="min-h-[100px] resize-none w-full"
                 maxLength={250}
               />
-              <Button 
-                type="submit" 
-                disabled={mutation.isPending || !form.watch("content")?.trim()}
-                className="w-full md:w-auto"
-              >
-                Post
-              </Button>
+              {!drawingData ? (
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="icon"
+                      className="h-9 w-9"
+                      title="Desenhar"
+                      onClick={() => setIsDrawModalOpen(true)}
+                    >
+                      <PenTool className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="icon"
+                      className="h-9 w-9"
+                      title="Adicionar imagem"
+                      disabled={true}
+                    >
+                      <Image className="h-4 w-4" />
+                    </Button>
+                  </div>
+                  <Button 
+                    type="submit" 
+                    disabled={mutation.isPending || !isPostEnabled()}
+                    className="px-6"
+                  >
+                    Post
+                  </Button>
+                </div>
+              ) : (
+                <div className="flex justify-end">
+                  <Button 
+                    type="submit" 
+                    disabled={mutation.isPending || !isPostEnabled()}
+                    className="px-6"
+                  >
+                    Post
+                  </Button>
+                </div>
+              )}
             </div>
+            
+            {drawingData && (
+              <DrawingPreview 
+                drawingData={drawingData} 
+                onRemove={handleRemoveDrawing} 
+              />
+            )}
+            
             <div className="flex justify-between items-center text-sm text-gray-500">
               <span>
                 {form.formState.errors.content && (
@@ -81,16 +142,24 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {data?.pages.flat().map((p: any) => (
-            <CardPost 
-              key={p.id} 
-              id={p.id} 
-              content={p.content} 
-              createdAt={p.createdAt} 
-            />
-          ))}
-        </div>
+        {isLoading || isPending ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            <CardPostSkeleton count={8} />
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {data?.pages.flat().map((p: any) => (
+              <CardPost 
+                key={p.id} 
+                id={p.id} 
+                type={p.type}
+                content={p.content} 
+                drawing_data={p.drawing_data}
+                createdAt={p.createdAt} 
+              />
+            ))}
+          </div>
+        )}
 
         <div ref={loader} className="h-10">
           {isFetchingNextPage && (
@@ -102,6 +171,12 @@ export default function Home() {
 
         <BackToTop />
       </div>
+
+      <DrawingPostModal
+        isOpen={isDrawModalOpen}
+        onClose={() => setIsDrawModalOpen(false)}
+        onSave={handleDrawingSave}
+      />
     </main>
   );
 }

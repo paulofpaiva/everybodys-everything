@@ -11,8 +11,8 @@ export const usePosts = (sortBy: string = "latest", query: string = "") => {
   const { showToast } = useToast();
   
   const form = useForm<PostFormData>({
-    resolver: zodResolver(insertPostSchema),
     defaultValues: {
+      type: "text",
       content: "",
     },
   });
@@ -22,6 +22,8 @@ export const usePosts = (sortBy: string = "latest", query: string = "") => {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
+    isLoading,
+    isPending,
   } = useInfiniteQuery({
     queryKey: ["posts", sortBy, query],
     queryFn: async ({ pageParam = 0 }) => {
@@ -72,5 +74,7 @@ export const usePosts = (sortBy: string = "latest", query: string = "") => {
     mutation,
     loader,
     isFetchingNextPage,
+    isLoading,
+    isPending,
   };
 };
