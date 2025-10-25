@@ -17,9 +17,14 @@ export function CardPost({ id, content, createdAt }: CardPostProps) {
           </p>
         </CardContent>
         <CardFooter className="p-4 pt-0">
-          <span className="text-xs text-muted-foreground group-hover:text-foreground transition-colors">
-            {new Date(createdAt).toLocaleString()}
-          </span>
+          <div className="flex flex-col gap-1">
+            <span className="text-xs text-muted-foreground group-hover:text-foreground transition-colors">
+              by Anonymous
+            </span>
+            <span className="text-xs text-muted-foreground group-hover:text-foreground transition-colors">
+              {new Date(createdAt).toLocaleString()}
+            </span>
+          </div>
         </CardFooter>
       </Card>
     </Link>

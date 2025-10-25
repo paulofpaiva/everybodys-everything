@@ -36,17 +36,20 @@ export function PostDetail({ post }: PostDetailProps) {
 
             <Separator />
 
-            <div className="text-sm text-muted-foreground flex items-center">
-              {new Date(post.createdAt).toLocaleDateString("en-GB", {
-                day: "2-digit",
-                month: "short",
-                year: "numeric",
-              }).replace(/(\d{2}) (\w{3}) (\d{4})/, "$1 $2 $3")}
-              <span className="mx-1">·</span>
-              {new Date(post.createdAt).toLocaleTimeString("en-GB", {
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
+            <div className="text-sm text-muted-foreground flex flex-col gap-1">
+              <span>posted by Anonymous</span>
+              <span>
+                {new Date(post.createdAt).toLocaleDateString("en-GB", {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric",
+                }).replace(/(\d{2}) (\w{3}) (\d{4})/, "$1 $2 $3")}
+                <span className="mx-1">·</span>
+                {new Date(post.createdAt).toLocaleTimeString("en-GB", {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              </span>
             </div>
           </CardContent>
         </Card>

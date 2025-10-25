@@ -24,7 +24,7 @@ export function PostDetailSkeleton() {
             <Separator />
 
             <div className="text-sm">
-              <Skeleton className="h-4 w-32" />
+              <Skeleton className="h-4 w-48" />
             </div>
           </CardContent>
         </Card>

@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { insertPostSchema, type PostFormData } from "@/db/schema";
 import { useToast } from "@/hooks/use-toast";
 
-export const usePosts = (sortBy: string = "latest") => {
+export const usePosts = (sortBy: string = "latest", query: string = "") => {
   const queryClient = useQueryClient();
   const { showToast } = useToast();
   
@@ -23,9 +23,14 @@ export const usePosts = (sortBy: string = "latest") => {
     hasNextPage,
     isFetchingNextPage,
   } = useInfiniteQuery({
-    queryKey: ["posts", sortBy],
+    queryKey: ["posts", sortBy, query],
     queryFn: async ({ pageParam = 0 }) => {
-      const res = await api.get(`/posts?page=${pageParam}&sortBy=${sortBy}`);
+      const params = new URLSearchParams({
+        page: pageParam.toString(),
+        sortBy,
+        ...(query && { query })
+      });
+      const res = await api.get(`/posts?${params}`);
       return res.data;
     },
     initialPageParam: 0,

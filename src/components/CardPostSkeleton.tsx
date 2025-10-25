@@ -13,7 +13,7 @@ export function CardPostSkeleton({ count = 1 }: CardPostSkeletonProps) {
             <div className="h-4 bg-gray-200 rounded w-1/3"></div>
           </div>
           <div className="mt-2">
-            <div className="h-3 bg-gray-200 rounded w-24"></div>
+            <div className="h-3 bg-gray-200 rounded w-40"></div>
           </div>
         </div>
       ))}
