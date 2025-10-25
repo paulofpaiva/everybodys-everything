@@ -14,6 +14,7 @@ export const usePosts = (sortBy: string = "latest", query: string = "") => {
     defaultValues: {
       type: "text",
       content: "",
+      animation: null,
     },
   });
 

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { usePosts } from "@/features/posts/hooks/use-posts";
 
-export function useDrawingPost(sortBy: string, searchQuery: string) {
+export function useDrawingPost(sortBy: string, searchQuery: string, onAnimationReset?: () => void) {
   const [isDrawModalOpen, setIsDrawModalOpen] = useState(false);
   const [drawingData, setDrawingData] = useState<any>(null);
   
@@ -32,6 +32,7 @@ export function useDrawingPost(sortBy: string, searchQuery: string) {
       type,
       content: content || null,
       drawing_data: drawingData,
+      animation: data.animation || null,
     };
 
     form.setValue("type", type as any);
@@ -40,6 +41,7 @@ export function useDrawingPost(sortBy: string, searchQuery: string) {
       onSuccess: (result) => {
         setDrawingData(null);
         form.reset();
+        onAnimationReset?.();
       },
       onError: (error) => {
         console.error("Error creating post:", error);

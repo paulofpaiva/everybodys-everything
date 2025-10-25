@@ -6,6 +6,7 @@ import Link from "next/link";
 import { ArrowLeft, Hash } from "lucide-react";
 import { ShareDropdown } from "@/components/ShareDropdown";
 import { PostContent } from "@/components/PostContent";
+import { LottieAnimations } from "@/components/LottieAnimations";
 
 interface PostDetailProps {
   post: {
@@ -13,12 +14,12 @@ interface PostDetailProps {
     type: string;
     content?: string | null;
     drawing_data?: any;
+    animation?: string | null;
     createdAt: Date | string;
   };
 }
 
 export function PostDetail({ post }: PostDetailProps) {
-  
   return (
     <main className="container mx-auto px-4 py-8 max-w-4xl">
       <div className="mb-8">
@@ -42,6 +43,10 @@ export function PostDetail({ post }: PostDetailProps) {
                 isDetailView={true}
               />
             </div>
+
+            <LottieAnimations animation={post.animation} width={100} height={50}>
+              <div></div>
+            </LottieAnimations>
 
             <Separator />
 

@@ -17,13 +17,15 @@ interface ResponsiveDropdownProps {
   onValueChange: (value: string) => void;
   options: { value: string; label: string }[];
   placeholder?: string;
+  title?: string;
 }
 
 export function ResponsiveDropdown({ 
   value, 
   onValueChange, 
   options, 
-  placeholder = "Select..." 
+  placeholder = "Select...",
+  title = "Filter by"
 }: ResponsiveDropdownProps) {
   const [open, setOpen] = useState(false);
   const isMobile = useIsMobile();
@@ -46,19 +48,21 @@ export function ResponsiveDropdown({
         </DrawerTrigger>
         <DrawerContent>
           <DrawerHeader>
-            <DrawerTitle>Filter by</DrawerTitle>
+            <DrawerTitle>{title}</DrawerTitle>
           </DrawerHeader>
-          <div className="p-4 space-y-2">
-            {options.map((option) => (
-              <Button
-                key={option.value}
-                variant={value === option.value ? "default" : "ghost"}
-                className="w-full justify-start"
-                onClick={() => handleSelect(option.value)}
-              >
-                {option.label}
-              </Button>
-            ))}
+          <div className="p-4 max-h-[60vh] overflow-y-auto">
+            <div className="space-y-2">
+              {options.map((option) => (
+                <Button
+                  key={option.value}
+                  variant={value === option.value ? "default" : "ghost"}
+                  className="w-full justify-start"
+                  onClick={() => handleSelect(option.value)}
+                >
+                  {option.label}
+                </Button>
+              ))}
+            </div>
           </div>
         </DrawerContent>
       </Drawer>
@@ -73,7 +77,7 @@ export function ResponsiveDropdown({
           <ChevronDown className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent>
+      <DropdownMenuContent className="max-h-[300px] overflow-y-auto">
         {options.map((option) => (
           <DropdownMenuItem
             key={option.value}

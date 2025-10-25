@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
@@ -13,10 +13,13 @@ import { Search, Image, PenTool } from "lucide-react";
 import { DrawingPostModal } from "@/components/DrawingPostModal";
 import { DrawingPreview } from "@/components/DrawingPreview";
 import { useDrawingPost } from "@/hooks/use-drawing-post";
+import { animationOptions } from "@/lib/animation-options";
+import { LottieAnimations } from "@/components/LottieAnimations";
 
 export default function Home() {
   const [sortBy, setSortBy] = useState("latest");
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedAnimation, setSelectedAnimation] = useState<string | null>(null);
   const { 
     form, 
     data, 
@@ -32,7 +35,9 @@ export default function Home() {
     handleRemoveDrawing,
     handleSubmit,
     isPostEnabled,
-  } = useDrawingPost(sortBy, searchQuery);
+  } = useDrawingPost(sortBy, searchQuery, () => {
+    setSelectedAnimation(null);
+  });
 
   return (
     <main className="container mx-auto px-4 py-8">
@@ -45,36 +50,41 @@ export default function Home() {
         <form onSubmit={form.handleSubmit(handleSubmit)} className="md:max-w-md">
           <div className="space-y-2">
             <div className="flex flex-col gap-2">
-              <Textarea
-                {...form.register("content")}
-                placeholder="Say something..."
-                className="min-h-[100px] resize-none w-full"
-                maxLength={250}
-              />
-              {!drawingData ? (
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="icon"
-                      className="h-9 w-9"
-                      title="Desenhar"
-                      onClick={() => setIsDrawModalOpen(true)}
-                    >
-                      <PenTool className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="icon"
-                      className="h-9 w-9"
-                      title="Adicionar imagem"
-                      disabled={true}
-                    >
-                      <Image className="h-4 w-4" />
-                    </Button>
-                  </div>
+                <Textarea
+                  {...form.register("content")}
+                  placeholder="Say something..."
+                  className="min-h-[100px] resize-none w-full"
+                  maxLength={250}
+                />
+                {!drawingData ? (
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="icon"
+                        className="h-9 w-9"
+                        title="Draw"
+                        onClick={() => setIsDrawModalOpen(true)}
+                      >
+                        <PenTool className="h-4 w-4" />
+                      </Button>
+                      <ResponsiveDropdown
+                        value={form.watch("animation") || ""}
+                        onValueChange={(value) => {
+                          form.setValue("animation", value || null);
+                          setSelectedAnimation(value || null);
+                        }}
+                        options={animationOptions}
+                        placeholder="Animation..."
+                        title="Animation"
+                      />
+                      {selectedAnimation && (
+                        <LottieAnimations animation={selectedAnimation} width={32} height={32}>
+                          <div></div>
+                        </LottieAnimations>
+                      )}
+                    </div>
                   <Button 
                     type="submit" 
                     disabled={mutation.isPending || !isPostEnabled()}
@@ -138,6 +148,7 @@ export default function Home() {
                 { value: "oldest", label: "Oldest" }
               ]}
               placeholder="Filter by..."
+              title="Filter by"
             />
           </div>
         </div>
@@ -155,6 +166,7 @@ export default function Home() {
                 type={p.type}
                 content={p.content} 
                 drawing_data={p.drawing_data}
+                animation={p.animation}
                 createdAt={p.createdAt} 
               />
             ))}

@@ -5,16 +5,18 @@ import Link from "next/link";
 import { isOnlyLink } from "@/lib/url-utils";
 import { ShareDropdown } from "@/components/ShareDropdown";
 import { PostContent } from "@/components/PostContent";
+import { LottieAnimations } from "./LottieAnimations";
 
 interface CardPostProps {
   id: string;
   type: string;
   content?: string | null;
   drawing_data?: any;
+  animation?: string | null;
   createdAt: string;
 }
 
-export function CardPost({ id, type, content, drawing_data, createdAt }: CardPostProps) {
+export function CardPost({ id, type, content, drawing_data, animation, createdAt }: CardPostProps) {
   const isLinkOnly = content ? isOnlyLink(content) : false;
   
   return (

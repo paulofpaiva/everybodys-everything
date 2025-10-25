@@ -7,6 +7,7 @@ export const posts = pgTable("posts", {
   type: varchar("type", { length: 20 }).notNull(),
   content: varchar("content", { length: 250 }),
   drawing_data: jsonb("drawing_data"),
+  animation: varchar("animation", { length: 50 }),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -15,12 +16,19 @@ export const insertPostSchema = createInsertSchema(posts, {
     .max(250, "Content must be less than 250 characters")
     .trim()
     .optional(),
+  animation: (schema) => schema
+    .optional()
+    .nullable()
+        .refine((val) => {
+          if (!val) return true;
+          const validAnimations = ['heart', 'heart_broken', 'heart_blind', 'dog_and_man', 'path_to_victory', 'couple_walking'];
+          return validAnimations.includes(val);
+        }, "Invalid animation type"),
 }).refine(
   (data) => {
     if (data.type === "text") return !!data.content?.trim();
     if (data.type === "drawing") {
       if (!data.drawing_data) return false;
-      // Suportar tanto array direto quanto objeto com paths
       if (Array.isArray(data.drawing_data)) return data.drawing_data.length > 0;
       if (typeof data.drawing_data === 'object' && data.drawing_data !== null && 'paths' in data.drawing_data && Array.isArray((data.drawing_data as any).paths)) {
         return (data.drawing_data as any).paths.length > 0;
@@ -29,7 +37,6 @@ export const insertPostSchema = createInsertSchema(posts, {
     }
     if (data.type === "mixed") {
       if (!data.content?.trim() || !data.drawing_data) return false;
-      // Suportar tanto array direto quanto objeto com paths
       if (Array.isArray(data.drawing_data)) return data.drawing_data.length > 0;
       if (typeof data.drawing_data === 'object' && data.drawing_data !== null && 'paths' in data.drawing_data && Array.isArray((data.drawing_data as any).paths)) {
         return (data.drawing_data as any).paths.length > 0;
