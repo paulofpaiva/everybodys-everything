@@ -7,8 +7,6 @@ RUN bun install --frozen-lockfile
 
 COPY . .
 
-RUN bun add @next/swc-linux-x64-gnu
-
 RUN bun run build
 
 FROM oven/bun:1 as runner

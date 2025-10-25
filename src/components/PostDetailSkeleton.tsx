@@ -11,20 +11,13 @@ export function PostDetailSkeleton() {
       </div>
 
       <div className="space-y-6">
-        <div className="flex items-center gap-2">
-          <Skeleton className="h-6 w-16" />
-          <Skeleton className="h-6 w-32" />
-        </div>
-
         <Card className="shadow-xl border-0 bg-white/80 dark:bg-black/80 backdrop-blur-sm">
           <CardContent className="space-y-6">
-            <div className="space-y-3">
-              <div className="bg-gray-50 dark:bg-black/50 rounded-lg p-6 border-l-4 border-primary">
-                <div className="space-y-3">
-                  <Skeleton className="h-6 w-full" />
-                  <Skeleton className="h-6 w-4/5" />
-                  <Skeleton className="h-6 w-3/4" />
-                </div>
+            <div className="pt-5">
+              <div className="space-y-3">
+                <Skeleton className="h-6 w-full" />
+                <Skeleton className="h-6 w-4/5" />
+                <Skeleton className="h-6 w-3/4" />
               </div>
             </div>
 

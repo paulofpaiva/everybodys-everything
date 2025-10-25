@@ -3,6 +3,8 @@ import { db } from "@/server/db";
 import { posts } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
+export const runtime = "nodejs";
+
 export async function GET(
   req: Request,
   { params }: { params: Promise<{ id: string }> }

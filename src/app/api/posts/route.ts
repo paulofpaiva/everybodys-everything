@@ -3,6 +3,8 @@ import { db } from "@/server/db";
 import { insertPostSchema, posts } from "@/db/schema";
 import { desc, asc } from "drizzle-orm";
 
+export const runtime = "nodejs";
+
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const page = parseInt(searchParams.get("page") || "0", 10);
