@@ -1,4 +1,4 @@
-![Everybody's Everything Logo](./public/ee_logo.png)
+![Everybody's Everything Logo](./assets/ee_logo.png)
 
 # Everybody's Everything
 
