@@ -49,16 +49,9 @@ export function PostDetail({ post }: PostDetailProps) {
               <div className="flex flex-col gap-1">
                 <span>posted by Anonymous</span>
                 <span>
-                  {new Date(post.createdAt).toLocaleDateString("en-GB", {
-                    day: "2-digit",
-                    month: "short",
-                    year: "numeric",
-                  }).replace(/(\d{2}) (\w{3}) (\d{4})/, "$1 $2 $3")}
+                  {new Date(post.createdAt).toLocaleDateString()}
                   <span className="mx-1">·</span>
-                  {new Date(post.createdAt).toLocaleTimeString("en-GB", {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
+                  {new Date(post.createdAt).toLocaleTimeString()}
                 </span>
               </div>
               <ShareDropdown postId={post.id} />
