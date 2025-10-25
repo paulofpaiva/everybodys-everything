@@ -4,7 +4,8 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import { ArrowLeft, Hash } from "lucide-react";
-import { formatTextWithLinks } from "@/lib/url-utils";
+import { formatTextWithLinksAndHashtags } from "@/lib/url-utils";
+import { ShareDropdown } from "@/components/ShareDropdown";
 
 interface PostDetailProps {
   post: {
@@ -15,7 +16,7 @@ interface PostDetailProps {
 }
 
 export function PostDetail({ post }: PostDetailProps) {
-  const textParts = formatTextWithLinks(post.content);
+  const textParts = formatTextWithLinksAndHashtags(post.content);
   
   return (
     <main className="container mx-auto px-4 py-8 max-w-4xl">
@@ -44,6 +45,10 @@ export function PostDetail({ post }: PostDetailProps) {
                     >
                       {part.text}
                     </a>
+                  ) : part.isHashtag ? (
+                    <span key={index} className="text-blue-600 dark:text-blue-400 font-medium">
+                      {part.text}
+                    </span>
                   ) : (
                     <span key={index}>{part.text}</span>
                   )
@@ -53,20 +58,23 @@ export function PostDetail({ post }: PostDetailProps) {
 
             <Separator />
 
-            <div className="text-sm text-muted-foreground flex flex-col gap-1">
-              <span>posted by Anonymous</span>
-              <span>
-                {new Date(post.createdAt).toLocaleDateString("en-GB", {
-                  day: "2-digit",
-                  month: "short",
-                  year: "numeric",
-                }).replace(/(\d{2}) (\w{3}) (\d{4})/, "$1 $2 $3")}
-                <span className="mx-1">·</span>
-                {new Date(post.createdAt).toLocaleTimeString("en-GB", {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}
-              </span>
+            <div className="text-sm text-muted-foreground flex justify-between items-start">
+              <div className="flex flex-col gap-1">
+                <span>posted by Anonymous</span>
+                <span>
+                  {new Date(post.createdAt).toLocaleDateString("en-GB", {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric",
+                  }).replace(/(\d{2}) (\w{3}) (\d{4})/, "$1 $2 $3")}
+                  <span className="mx-1">·</span>
+                  {new Date(post.createdAt).toLocaleTimeString("en-GB", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </span>
+              </div>
+              <ShareDropdown postId={post.id} />
             </div>
           </CardContent>
         </Card>
