@@ -17,5 +17,10 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/bun.lock ./bun.lock
 COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/src ./src
+COPY --from=builder /app/drizzle.config.ts ./drizzle.config.ts
+COPY --from=builder /app/scripts/entrypoint.sh ./scripts/entrypoint.sh
 
-CMD ["bun", "run", "start"]
+RUN chmod +x ./scripts/entrypoint.sh
+
+CMD ["./scripts/entrypoint.sh"]
