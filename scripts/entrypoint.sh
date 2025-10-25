@@ -1,4 +1,4 @@
-echo "Running database migrations..."
+docecho "Running database migrations..."
 bun run db:push
 
 echo "Starting Next.js server..."
