@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import { ArrowLeft, Hash } from "lucide-react";
+import { formatTextWithLinks } from "@/lib/url-utils";
 
 interface PostDetailProps {
   post: {
@@ -14,6 +15,8 @@ interface PostDetailProps {
 }
 
 export function PostDetail({ post }: PostDetailProps) {
+  const textParts = formatTextWithLinks(post.content);
+  
   return (
     <main className="container mx-auto px-4 py-8 max-w-4xl">
       <div className="mb-8">
@@ -30,7 +33,21 @@ export function PostDetail({ post }: PostDetailProps) {
           <CardContent className="space-y-6">
             <div className="pt-5">
               <p className="text-lg leading-relaxed text-gray-700 dark:text-gray-200">
-                {post.content}
+                {textParts.map((part, index) => 
+                  part.isLink ? (
+                    <a 
+                      key={index} 
+                      href={part.url} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-blue-600 dark:text-blue-400 underline hover:text-blue-800 dark:hover:text-blue-300 transition-colors"
+                    >
+                      {part.text}
+                    </a>
+                  ) : (
+                    <span key={index}>{part.text}</span>
+                  )
+                )}
               </p>
             </div>
 
