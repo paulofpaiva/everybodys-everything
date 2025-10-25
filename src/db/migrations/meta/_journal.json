@@ -5,29 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1761357951449,
-      "tag": "0000_productive_talos",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1761359090704,
-      "tag": "0001_lumpy_frog_thor",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1761360841768,
-      "tag": "0002_acoustic_sharon_carter",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
       "when": 1761402784124,
-      "tag": "0003_clumsy_starfox",
+      "tag": "0000_initial",
       "breakpoints": true
     }
   ]
