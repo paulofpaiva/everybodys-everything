@@ -44,7 +44,7 @@ export function PostDetail({ post }: PostDetailProps) {
               />
             </div>
 
-            <LottieAnimations animation={post.animation} width={100} height={50}>
+            <LottieAnimations animation={post.animation} width={300} height={300}>
               <div></div>
             </LottieAnimations>
 
