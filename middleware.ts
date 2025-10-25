@@ -1,17 +1,36 @@
+export const runtime = 'nodejs';
+
 import { NextResponse } from "next/server";
-import Redis from "ioredis";
 
-const redis = new Redis(process.env.REDIS_URL!);
+interface RateLimitEntry {
+  count: number;
+  resetTime: number;
+}
 
-async function limitRequest(ip: string, limit = 10, windowSeconds = 10) {
-  const key = `rate:${ip}`;
-  const current = await redis.incr(key);
+const rateLimitStore = new Map<string, RateLimitEntry>();
 
-  if (current === 1) {
-    await redis.expire(key, windowSeconds);
+setInterval(() => {
+  const now = Date.now();
+  for (const [key, entry] of rateLimitStore.entries()) {
+    if (entry.resetTime < now) {
+      rateLimitStore.delete(key);
+    }
   }
+}, 60000);
 
-  return current <= limit;
+async function limitRequest(ip: string, limit = 10, windowSeconds = 10): Promise<boolean> {
+  const now = Date.now();
+  const resetTime = now + windowSeconds * 1000;
+  
+  const entry = rateLimitStore.get(ip);
+  
+  if (!entry || entry.resetTime < now) {
+    rateLimitStore.set(ip, { count: 1, resetTime });
+    return true;
+  }
+  
+  entry.count++;
+  return entry.count <= limit;
 }
 
 export async function middleware(req: Request) {

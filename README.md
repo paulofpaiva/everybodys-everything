@@ -21,17 +21,17 @@ cp env.example .env
 **For local development:**
 ```env
 DATABASE_URL="postgresql://user:password@localhost:5432/dbname"
-REDIS_URL="redis://localhost:6379"
 ```
 
 **For Docker:**
 ```env
 DATABASE_URL="postgresql://postgres:postgres@db:5432/appdb"
-REDIS_URL="redis://redis:6379"
 POSTGRES_USER="postgres"
 POSTGRES_PASSWORD="postgres"
 POSTGRES_DB="appdb"
 ```
+
+**Note:** This app uses in-memory rate limiting (no external dependencies required).
 
 ### Running the Application
 
