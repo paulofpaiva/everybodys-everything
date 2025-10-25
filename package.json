@@ -6,6 +6,7 @@
     "dev": "dotenv -e .env.local -- drizzle-kit push && next dev",
     "build": "next build",
     "start": "next start",
+    "start:migrate": "drizzle-kit migrate && next start",
     "lint": "eslint",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
