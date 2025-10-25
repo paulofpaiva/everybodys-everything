@@ -8,7 +8,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <title>everybody's everything</title>
         <meta name="description" content="Just share whatever" />
-        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <link rel="icon" href="/favicon.ico" type="image/svg+xml" />
       </head>
       <body className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:bg-black dark:from-black dark:to-black">
         <Providers>

@@ -1,3 +1,5 @@
+![Everybody's Everything Logo](./public/ee_logo.png)
+
 # Everybody's Everything
 
 A simple anonymous posting application where anyone can post anything. Built with Next.js, TypeScript, and PostgreSQL.
